@@ -1,0 +1,26 @@
+{
+  "name": "@sembr/skills",
+  "version": "1.0.0",
+  "description": "Skills for reflowing prose with Semantic Line Breaks (sembr.org)",
+  "keywords": [
+    "pi-package",
+    "agent-skills",
+    "sembr",
+    "semantic-line-breaks"
+  ],
+  "license": "MIT",
+  "homepage": "https://sembr.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sembr/skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sembr/skills/issues"
+  },
+  "author": "Mattt Zmuda",
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

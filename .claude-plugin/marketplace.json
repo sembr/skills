@@ -1,0 +1,15 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "sembr",
+  "owner": {
+    "name": "Semantic Line Breaks",
+    "url": "https://sembr.org"
+  },
+  "plugins": [
+    {
+      "name": "sembr",
+      "source": "./",
+      "description": "Skills for reflowing prose with Semantic Line Breaks"
+    }
+  ]
+}

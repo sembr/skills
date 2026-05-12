@@ -1,0 +1,10 @@
+{
+  "name": "sembr",
+  "description": "Skills for reflowing prose with Semantic Line Breaks (sembr.org)",
+  "version": "1.0.0",
+  "author": {
+    "name": "Semantic Line Breaks",
+    "url": "https://sembr.org"
+  },
+  "homepage": "https://sembr.org"
+}

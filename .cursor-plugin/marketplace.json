@@ -1,0 +1,13 @@
+{
+  "name": "sembr",
+  "owner": {
+    "name": "Semantic Line Breaks"
+  },
+  "plugins": [
+    {
+      "name": "sembr",
+      "source": "./",
+      "description": "Skills for reflowing prose with Semantic Line Breaks"
+    }
+  ]
+}
