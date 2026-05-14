@@ -27,10 +27,22 @@ or add manually via **Settings > Rules > Add Rule > Remote Rule (Github)** with 
 
 ### npx skills
 
-Install using the [`npx skills`](https://skills.sh) CLI:
+Install using the [`npx skills`](https://skills.sh) CLI from
+[sembr.org](https://sembr.org):
 
 ```console
-npx skills add https://github.com/sembr/skills
+npx skills add https://sembr.org
+```
+
+`sembr.org` serves the skills under the
+[`/.well-known/agent-skills/`](https://sembr.org/.well-known/agent-skills/index.json)
+endpoint
+([RFC 8615](https://www.rfc-editor.org/rfc/rfc8615)).
+
+Alternatively, install directly from GitHub:
+
+```console
+npx skills add sembr/skills
 ```
 
 ### Pi
