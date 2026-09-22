@@ -62,7 +62,8 @@ for manual updates and scope options.
 
 ### Cursor
 
-In **Customize**, select **From GitHub Repository**
+In **Customize**, open **Plugins**,
+then select **Add > From GitHub Repository**
 and enter `https://github.com/sembr/skills`.
 After importing the marketplace, install the `sembr` plugin.
 The repository includes the Cursor marketplace manifest required for import.
