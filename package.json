@@ -1,6 +1,6 @@
 {
   "name": "@sembr/skills",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Skills for reflowing prose with Semantic Line Breaks (sembr.org)",
   "keywords": [
     "pi-package",

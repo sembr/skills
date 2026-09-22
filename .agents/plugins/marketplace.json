@@ -1,0 +1,20 @@
+{
+  "name": "sembr",
+  "interface": {
+    "displayName": "SemBr"
+  },
+  "plugins": [
+    {
+      "name": "sembr",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/sembr/skills.git"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
