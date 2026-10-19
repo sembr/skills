@@ -35,7 +35,27 @@ Apply these rules in order:
 
 ## Quality Checks
 
-Before returning output, verify:
+After rewriting a file,
+run `scripts/check.py` from this skill's directory:
+
+```console
+python3 scripts/check.py path/to/file.md
+```
+
+It compares the file with its version at `HEAD`
+and fails if anything other than line breaks changed:
+a word, a code line or code block, a table,
+or a break that changes how the text renders,
+such as a new list item, a joined heading, or a hard line break.
+In source files, it checks that only comments were rewrapped.
+It also warns about changed lines over 80 columns
+and sentences that continue on the same line.
+Fix each error and warning, then run it again.
+Pass `--before <file>` to compare with a saved copy instead,
+or run it with no files to check every file changed since `HEAD`.
+It needs Python 3.9 or later and no other packages.
+
+If the script isn't available, verify by hand:
 
 - Rendering-equivalence: no hard-break syntax added accidentally.
 - Meaning-equivalence: no word changes or punctuation edits.
