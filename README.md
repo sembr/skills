@@ -151,6 +151,16 @@ Explicit selection and activation depend on the agent;
 use its skill selector if the skill does not load for your request.
 Review the resulting diff before accepting the changes.
 
+The skill checks its own work with `scripts/check.py`,
+which fails if a reformat changed anything other than line breaks.
+You can run it yourself, too:
+
+```shell
+python3 skills/sembr-reformat/scripts/check.py README.md
+```
+
+With no files, it checks every file changed since `HEAD`.
+
 ## Managing CLI installations
 
 For skills installed with `npx skills`,
@@ -177,7 +187,7 @@ For a plugin or Pi package, use the manager that installed it.
 
 Clone this repository and copy the complete
 `skills/sembr-reformat/` folder into your agent's skill directory,
-including `SKILL.md` and `agents/openai.yaml`.
+including `SKILL.md`, `agents/openai.yaml`, and `scripts/check.py`.
 
 | Agent | User skill directory | Documentation |
 | --- | --- | --- |
