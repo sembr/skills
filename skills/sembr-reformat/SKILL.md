@@ -51,8 +51,9 @@ In source files, it checks that only comments were rewrapped.
 It also warns about changed lines over 80 columns
 and sentences that continue on the same line.
 Fix each error and warning, then run it again.
-Pass `--before <file>` to compare with a saved copy instead,
-or run it with no files to check every file changed since `HEAD`.
+Pass `--before <file>` to compare with a saved copy instead.
+With no file arguments, it checks files modified since `HEAD`
+and reports deletions of files with recognized prose extensions.
 It needs Python 3.9 or later and no other packages.
 
 If the script isn't available, verify by hand:

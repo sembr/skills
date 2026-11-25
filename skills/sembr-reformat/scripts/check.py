@@ -12,7 +12,7 @@ and sentences that continue on the same line.
 Usage:
     python3 check.py [FILE ...] [--rev REV] [--before PATH] [--width N]
 
-With no files, it checks every file that differs from REV.
+With no files, it checks modified files and deletions of recognized prose files.
 Exit status: 0 when only line breaks changed, 1 otherwise, 2 for usage errors.
 Requires Python 3.9 or later and no other packages.
 If markdown-it-py is installed, Markdown files are also compared as rendered HTML.
@@ -140,22 +140,31 @@ class Line:
 # Reading files
 
 
-def git(args: Sequence[str], cwd: str) -> str:
-    result = subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, check=False)
+def git(args: Sequence[str], cwd: str) -> bytes:
+    result = subprocess.run(["git", *args], cwd=cwd, capture_output=True, check=False)
     if result.returncode != 0:
-        raise RuntimeError(result.stderr.strip() or f"git {' '.join(args)} failed")
+        raise RuntimeError(os.fsdecode(result.stderr).strip() or f"git {' '.join(args)} failed")
     return result.stdout
 
 
 def read_before(path: str, rev: str) -> str:
     directory, name = os.path.split(os.path.abspath(path))
-    return git(["show", f"{rev}:./{name}"], directory)
+    text = git(["show", f"{rev}:./{name}"], directory).decode("utf-8")
+    return text.replace("\r\n", "\n").replace("\r", "\n")
 
 
-def changed_files(rev: str) -> list[str]:
-    root = git(["rev-parse", "--show-toplevel"], os.getcwd()).strip()
-    names = git(["diff", "--name-only", "--diff-filter=M", rev, "--"], root).split("\n")
-    return [os.path.relpath(os.path.join(root, n)) for n in names if n]
+def changed_files(rev: str) -> list[tuple[str, bool]]:
+    root = os.fsdecode(git(["rev-parse", "--show-toplevel"], os.getcwd()).removesuffix(b"\n"))
+    diff = git(["diff", "--name-status", "-z", "--diff-filter=MD", rev, "--"], root)
+    fields = iter(os.fsdecode(diff).split("\0")[:-1])
+    files = []
+    for status, name in zip(fields, fields):
+        deleted = status == "D"
+        ext = os.path.splitext(name)[1].lower()
+        if deleted and not (ext and ext in PROSE):
+            continue
+        files.append((os.path.relpath(os.path.join(root, name)), deleted))
+    return files
 
 
 # Words and line starts
@@ -532,7 +541,9 @@ def check(path: str, before: str, after: str, width: int) -> Report:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument(
-        "files", nargs="*", help="files to check (default: files changed since REV)"
+        "files",
+        nargs="*",
+        help="files to check (default: modified files and deleted prose files since REV)",
     )
     parser.add_argument(
         "--rev", default="HEAD", help="git revision to compare with (default: HEAD)"
@@ -544,7 +555,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        files = args.files or changed_files(args.rev)
+        files = [(path, False) for path in args.files] or changed_files(args.rev)
     except RuntimeError as error:
         print(f"check.py: {error}", file=sys.stderr)
         return 2
@@ -556,7 +567,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     failed = False
-    for path in files:
+    for path, deleted in files:
+        if deleted:
+            print(f"{path}: FAIL (deleted)")
+            failed = True
+            continue
         try:
             with open(path, encoding="utf-8") as f:
                 after = f.read()

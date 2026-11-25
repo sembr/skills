@@ -239,6 +239,25 @@ class CommandLineTests(unittest.TestCase):
         self.assertEqual(status, 0)
         self.assertIn("doc.md: ok", out)
 
+    def test_checks_deleted_documents_by_default(self):
+        Path("asset.png").write_bytes(b"\x00\xff")
+        self.git("add", "asset.png")
+        self.git("commit", "-q", "-m", "Add asset")
+        self.git("rm", "asset.png")
+        self.assertEqual(self.main()[0], 0)
+
+        Path("doc.md").unlink()
+        status, out = self.main()
+        self.assertEqual(status, 1)
+        self.assertIn("doc.md: FAIL (deleted)", out)
+        self.assertNotIn("asset.png", out)
+
+        self.git("add", "-u")
+        Path("doc.md").write_text(UDHR)
+        status, out = self.main()
+        self.assertEqual(status, 1)
+        self.assertIn("doc.md: FAIL (deleted)", out)
+
     def test_compares_with_a_before_file(self):
         Path("before.md").write_text(UDHR)
         Path("after.md").write_text(UDHR_SEMBR)
