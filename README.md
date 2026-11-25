@@ -159,7 +159,8 @@ You can run it yourself, too:
 python3 skills/sembr-reformat/scripts/check.py README.md
 ```
 
-With no files, it checks every file changed since `HEAD`.
+With no file arguments, it checks files modified since `HEAD`
+and reports deletions of files with recognized prose extensions.
 
 ## Managing CLI installations
 
